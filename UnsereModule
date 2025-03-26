@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktive Präsentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .slide-container {
+            text-align: center;
+        }
+        .slide {
+            width: 200px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            display: block;
+            margin-bottom: 10px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+    </style>
+</head>
+<body>
+    <div id="slidesContainer"></div>
+    <div class="overlay" id="overlay" onclick="closeOverlay()">
+        <img id="overlayImg" src="" alt="Große Ansicht">
+    </div>
+
+    <script>
+        const slides = [
+            "heheh/Präsentation1-page-001.jpg", "heheh/Präsentation1-page-002.jpg", "heheh/Präsentation1-page-003.jpg",
+            "heheh/Präsentation1-page-004.jpg", "heheh/Präsentation1-page-005.jpg", "heheh/Präsentation1-page-006.jpg",
+            "heheh/Präsentation1-page-007.jpg", "heheh/Präsentation1-page-008.jpg", "heheh/Präsentation1-page-009.jpg",
+            "heheh/Präsentation1-page-010.jpg", "heheh/Präsentation1-page-011.jpg", "heheh/Präsentation1-page-012.jpg",
+            "heheh/Präsentation1-page-013.jpg", "heheh/Präsentation1-page-014.jpg", "heheh/Präsentation1-page-015.jpg",
+            "heheh/Präsentation1-page-016.jpg", "heheh/Präsentation1-page-017.jpg", "heheh/Präsentation1-page-018.jpg",
+            "heheh/Präsentation1-page-019.jpg", "heheh/Präsentation1-page-020.jpg", "heheh/Präsentation1-page-021.jpg",
+            "heheh/Präsentation1-page-022.jpg"
+        ];
+        
+        const container = document.getElementById("slidesContainer");
+        
+        slides.forEach((src, index) => {
+            const slideContainer = document.createElement("div");
+            slideContainer.className = "slide-container";
+
+            const img = document.createElement("img");
+            img.src = src;
+            img.className = "slide";
+            img.alt = `Folie ${index + 1}`;
+            img.onclick = () => openOverlay(src);
+
+            slideContainer.appendChild(img);
+            
+            if (index % 2 === 1) { // Nur bei jeder 2. Folie
+                const button = document.createElement("button");
+                button.textContent = "Auswählen";
+                button.onclick = () => askForName(src);
+                slideContainer.appendChild(button);
+            }
+            
+            container.appendChild(slideContainer);
+        });
+        
+        function openOverlay(src) {
+            document.getElementById("overlayImg").src = src;
+            document.getElementById("overlay").style.display = "flex";
+        }
+
+        function closeOverlay() {
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function askForName(selectedSlide) {
+            const name = prompt("Bitte geben Sie Ihren Vor- und Nachnamen ein:");
+            if (name) {
+                sendEmail(name, selectedSlide);
+            }
+        }
+
+        function sendEmail(name, slide) {
+            const email = "urologielerchenberg@gmail.com";
+            const subject = "Ausgewählte Folie";
+            const body = `Name: ${name}%0D%0AAusgewählte Folie: ${slide}`;
+            
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        }
+    </script>
+</body>
+</html>
